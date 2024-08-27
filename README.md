@@ -7,10 +7,10 @@
 
 ## Integrantes da Equipe - Team Members 
 - Lucas Berlim
-- Lucas Coco
+- Lucas Gomes Coco
 - Renan Ferreira
 - Romulo Lourenço
-- Tiago Valinhos
+- Tiago Valinhos Ventura
 - Victor Hugo Schuenck
 <br><br>
 
