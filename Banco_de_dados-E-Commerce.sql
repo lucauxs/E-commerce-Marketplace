@@ -212,9 +212,9 @@ INSERT INTO telefones(telefone, id_usuario) VALUES
 -- REQUISITOS TRABALHO DO 5 AO 7:
 -- ******************************
 
-
 -- *** 5- ATUALIZAÇÃO DE REGISTROS ***:
 UPDATE produtos SET nome = 'Playstation 5 Slim Disk' WHERE id = 6; -- Atualiza nome do produto no id de um produto específico.
+SELECT * FROM produtos
 
 UPDATE estoque SET quantidade = 5 WHERE id_produto = 8; -- Atualiza a quantidade de estoque de um id de produto específico. 
 
@@ -224,10 +224,10 @@ UPDATE itens_do_pedido SET quantidade_produto = 2 WHERE id_pedido = 1 AND id_pro
 
 UPDATE categorias SET nome = 'Alimentos industrializados', descricao = 'Produtos com técnicas de adição de ingredientes e produtos químicos' WHERE id = 3; -- Função criada para adicionar uma subcategoria em Alimentos.
 
-
 -- *** 6- EXCLUSÃO DE UM REGISTRO ***: 
 -- Deleta um pedido pelo id do pedido:
-DELETE FROM itens_do_pedido WHERE id_pedido = 2; 
+DELETE FROM itens_do_pedido WHERE id_pedido = 3; 
+SELECT * FROM itens_do_pedido
 
 -- Deleta um usuário pelo id:
 DELETE FROM usuarios WHERE id = 10;
@@ -257,35 +257,36 @@ JOIN produtos p ON p.id_categoria = c.id
 GROUP BY c.nome
 ORDER BY c.nome;
 
---Seleciona o nome e as informações exclusivamente númericas de cada usuário:
-SELECT u.nome, u.cpf, u.cnpj, STRING_AGG(t.telefone, ' | '), e.cep FROM telefones t
+--Seleciona o nome e as informações númericas de cada usuário:
+SELECT u.nome, u.cpf, u.cnpj, STRING_AGG(t.telefone, ' | ') AS telefones, e.cep FROM telefones t
 INNER JOIN usuarios u ON u.id = t.id_usuario
 INNER JOIN enderecos e ON e.id_usuario = u.id
 GROUP BY u.nome, u.cpf, u.cnpj, e.cep
 ORDER BY u.nome;
 
 -- Seleciona os produtos, descrições, seus respectivos preços e a quantidade em estoque:
-SELECT pr.nome AS nomes, pr.descricao AS descrição, pr.valor_unitario AS valor_unitário, es.quantidade AS estoque
+SELECT pr.nome AS produto, pr.descricao AS descrição, pr.valor_unitario AS valor_unitário, es.quantidade AS estoque
 FROM estoque es
 JOIN produtos pr ON es.id_produto = pr.id
 ORDER BY valor_unitario DESC, Estoque DESC;
 
 
 -- *** 7.2- FAÇA UM COMANDO SQL COM COUNT() E GROUP BY ***: 
---Seleciona o nome da categoria e quantos produtos tem nela ordenado de forma decrescente pela quantidade:
+-- Seleciona o nome da categoria e quantos produtos tem nela ordenado de forma decrescente pela quantidade:
 SELECT c.nome AS categoria, COUNT(p.id_categoria) AS quantidade_produtos
 FROM categorias c
 JOIN produtos p ON p.id_categoria = c.id
 GROUP BY c.nome
 ORDER BY quantidade_produtos DESC;
 
---Seleciona o nome do comprador, o nome e a quantidade do produto comprado
-SELECT u.nome, pr.nome AS "produto", COUNT (ip.quantidade_produto) AS "quantidade de produtos"
+-- Exibe nome do usuário, seu produto e a quantidade do produto
+SELECT u.nome AS usuario, pr.nome AS produto, COUNT (ip.quantidade_produto) AS quantidade_produtos
 FROM usuarios u
 JOIN produtos pr ON pr.id_usuario = u.id
 JOIN itens_do_pedido ip ON ip.id_produto = pr.id
 GROUP BY u.nome, ip.quantidade_produto, pr.nome
 ORDER BY ip.quantidade_produto;
+
 
 -- *** 7.3- SQL PARA A CONSTRUÇÃO DE NOTA FICAL ***: 
 CREATE VIEW nota_fiscal AS
@@ -404,3 +405,7 @@ UPDATE estoque SET quantidade = 1 WHERE id_produto = 2
 INSERT INTO itens_do_pedido (id_pedido, id_produto, quantidade_produto) 
 VALUES
 	(10, 2, 3); -- VAI RETORNAR "Quantidade insuficiente em estoque"
+
+-- Teste de verificação, se inserir o mesmo produto duas vezes no pedido, ESPERADO: não deixar inserir.
+INSERT INTO itens_do_pedido (id_pedido, id_produto, quantidade_produto) VALUES
+	(1, 9, 1);
