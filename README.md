@@ -6,7 +6,7 @@
 </h2>
 
 ## Integrantes da Equipe - Team Members 
-- Lucas Berlim
+- Lucas Branco Berlim da Cunha
 - Lucas Gomes Coco
 - Renan Ferreira
 - Romulo Lourenço
